@@ -7,8 +7,13 @@ class Dij
 
 {
 public:
+	Dij(vector<vector<int>>* graphP, int debP);
+	~Dij();
+
+
 	void setGraph(vector<vector<int>>* graphP);
-	void Dijkstra(vector<vector<int>>* graph, int deb);
+	void setStartNode(int startNodeP);
+	void Dijkstra();
 
 private:
 	vector<vector<int>>* graph;
@@ -18,7 +23,8 @@ private:
 	int startNode;
 
 	void initialize(vector<vector<int>>* mat, int deb);
-	int findMin(int origin, vector<int> mat);
+	int findMin(vector<int> mat);
+	int currentLine = 0;
 	void updateDistance(int sommet1, int sommet2);
 };
 
