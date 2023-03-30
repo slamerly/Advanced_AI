@@ -37,14 +37,7 @@ void Dij::Dijkstra()
         {
             auto iter = find(begin(restNodes), end(restNodes), node1);
             restNodes.erase(iter);
-            /*
-            for (size_t i = 0; i < restNodes.size(); i++)
-            {
-                cout << restNodes[i] << ", ";
-            }
-            cout << endl;
-            */
-            cout << restNodes.size() << endl;
+            //cout << restNodes.size() << endl;
             for (size_t i = 0; i < restNodes.size(); i++)
             {
                 updateDistance(node1, restNodes.at(i));
@@ -52,24 +45,29 @@ void Dij::Dijkstra()
         }
     }
 
-
     //result
-    cout << "Way : " << endl;
-    for (size_t i = 0; i < predecesor.size(); i++)
+    cout << "RESULT - Origin(" << startNode << ")" << endl;
+    cout << "Predecesor:    Distance:" << endl;
+    for (size_t i = 0; i < predecessor.size(); i++)
     {
-        cout << "    " << predecesor.at(i) << endl;
+        cout << predecessor.at(i) << "               " << distance.at(i) << endl;
     }
     cout << endl;
+}
 
-    //distance
-    for (size_t i = 0; i < distance.size(); i++)
+void Dij::Destination(int dest)
+{
+    cout << endl << "DESTINATION(" << dest << ")" << endl;
+    cout << "Cost: " << distance.at(dest) << endl;
+
+    cout << "Road: ";
+    int cpt = dest;
+    while ( cpt != startNode )
     {
-        cout << i << ": ";
-        for (size_t j = 0; j < distance.at(i).size(); j++)
-        {
-            cout << distance.at(i).at(j) << ", ";
-        }
-        cout << endl;
+        cout << predecessor.at(cpt);
+        cpt = predecessor.at(cpt);
+        if (cpt != startNode)
+            cout << " <- ";
     }
 }
 
@@ -78,20 +76,15 @@ void Dij::initialize(vector<vector<int>>* mat, int deb)
     vector<int> line;
     for (size_t i = 0; i < mat->size(); i++)
     {
-        for (size_t j = 0; j < mat->size(); j++)
-        {
-            if (i == deb && j == deb)
-                line.push_back(0);
-            else
-                line.push_back(1000000);
-            cout << line.at(j) << ", ";
-        }
-        distance.push_back(line);
-        line.clear();
-        cout << endl;
+        if (i == deb)
+            distance.push_back(0);
+        else
+            distance.push_back(1000000);
+        //cout << distance.at(i) << ", ";
 
-        predecesor.push_back(i);
+        predecessor.push_back(i);
     }
+    //cout << endl;
 }
 
 int Dij::findMin(vector<int> mat)
@@ -100,26 +93,22 @@ int Dij::findMin(vector<int> mat)
     int node = -1;
     for (size_t i = 0; i < mat.size(); i++)
     {
-        for (size_t j = 0; j < distance.size(); j++)
+        if (distance[mat[i]] <= min)
         {
-            if (distance[j][mat[i]] <= min)
-            {
-                min = distance[j][mat[i]];
-                node = mat[i];
-            }
+            min = distance[mat[i]];
+            node = mat[i];
         }
     }
-    cout << "Find min : " << node << endl;
+    //cout << "Find min : " << node << endl;
     return node;
 }
 
 void Dij::updateDistance(int node1, int node2)
 {
-    
-    if (distance.at(startNode).at(node2) > distance.at(startNode).at(node1) + graph->at(node1).at(node1) + graph->at(node1).at(node2))
+    if (distance.at(node2) > distance.at(node1) + graph->at(node1).at(node1) + graph->at(node1).at(node2))
     {
-        distance[startNode][node2] = distance.at(startNode).at(node1) + (graph->at(node1).at(node1)+ graph->at(node1).at(node2));
-        predecesor[node2] = node1;
-        cout << node2 << ": dist: " << distance.at(startNode).at(node2) << ", predecesor: " << predecesor.at(node2) << endl;
+        distance[node2] = distance.at(node1) + (graph->at(node1).at(node1) + graph->at(node1).at(node2));
+        predecessor[node2] = node1;
+        //cout << node2 << ": dist: " << distance.at(node2) << ", predecesor: " << predecesor.at(node2) << endl;
     }
 }

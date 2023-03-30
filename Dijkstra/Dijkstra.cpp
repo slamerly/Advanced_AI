@@ -15,4 +15,5 @@ int main()
 
     Dij* dij = new Dij(&graph, 0);
     dij->Dijkstra();
+    dij->Destination(3);
 }

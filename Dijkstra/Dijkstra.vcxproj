@@ -127,10 +127,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Astar.cpp" />
     <ClCompile Include="Dij.cpp" />
     <ClCompile Include="Dijkstra.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Astar.h" />
     <ClInclude Include="Dij.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

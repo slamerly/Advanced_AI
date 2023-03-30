@@ -10,16 +10,16 @@ public:
 	Dij(vector<vector<int>>* graphP, int debP);
 	~Dij();
 
-
 	void setGraph(vector<vector<int>>* graphP);
 	void setStartNode(int startNodeP);
 	void Dijkstra();
+	void Destination(int dest);
 
 private:
 	vector<vector<int>>* graph;
-	vector<vector<int>> distance;
+	vector<int> distance;
 	vector<int> restNodes;
-	vector<int> predecesor;
+	vector<int> predecessor;
 	int startNode;
 
 	void initialize(vector<vector<int>>* mat, int deb);
