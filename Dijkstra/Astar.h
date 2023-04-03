@@ -11,18 +11,19 @@ struct Node
 class Astar
 {
 public:
-	void mostShortWay(vector<vector<int>> graph, Node start, Node end);
+	void mostShortWay(vector<vector<int>>* graph, int start, int end);
 
 private:
 	vector<vector<int>>* graph;
-	Node start;
+	int start;
 	vector<int> distance;
 	vector<int> predecessor;
 	vector<int> restNodes;
-	vector<Node> neighbours;
+	vector<int> neighbours;
 
 	int compareHeur(Node node1, Node node2);
 	void reconstructPath();
-	void findNeightbours(Node node);
+	void findNeightbours(int node);
+	void initialize(vector<vector<int>>* mat, int deb);
 };
 
