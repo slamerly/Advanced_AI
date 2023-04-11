@@ -50,7 +50,7 @@ void Dij::Dijkstra()
     cout << "Predecesor:    Distance:" << endl;
     for (size_t i = 0; i < predecessor.size(); i++)
     {
-        cout << predecessor.at(i) << "               " << distance.at(i) << endl;
+        cout << i << ": " << predecessor.at(i) << "               " << distance.at(i) << endl;
     }
     cout << endl;
 }
