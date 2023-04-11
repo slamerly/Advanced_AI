@@ -98,9 +98,9 @@ int main()
 
     vector<vector<int>> graph2{
         {1, 1, 1, 1, 1},
-        {1, 1, 0, 1, 1},
+        {1, 1, 0, 0, 1},
         {1, 0, 0, 1, 1},
-        {1, 1, 1, 1, 1},
+        {1, 0, 1, 1, 1},
         {1, 1, 1, 1, 1}
     };
     
@@ -128,8 +128,10 @@ int main()
     Dij* dij = new Dij(&translated, 0);
     dij->Dijkstra();
     dij->Destination(24);
+
+    cout << endl;
     */
 
-    Astar* ast = new Astar(&graph2);
+    Astar* ast = new Astar(&graph2, &translated);
     ast->mostShortWay(0, 24);
 }
