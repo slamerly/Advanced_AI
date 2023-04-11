@@ -20,6 +20,7 @@ private:
 	vector<int> predecessor;
 	vector<int> restNodes;
 	vector<int> neighbours;
+	vector<int> heuristique;
 
 	int compareHeur(Node node1, Node node2);
 	void reconstructPath();
