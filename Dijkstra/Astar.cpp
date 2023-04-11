@@ -1,7 +1,14 @@
 #include "Astar.h"
+#include <iostream>
 
-void Astar::mostShortWay(vector<vector<int>>* graph, int start, int target)
+Astar::Astar(vector<vector<int>>* graphP)
 {
+	graph = graphP;
+}
+
+void Astar::mostShortWay(int start, int target)
+{
+	/*
 	int currentNode;
 	initialize(graph, start);
 
@@ -14,6 +21,7 @@ void Astar::mostShortWay(vector<vector<int>>* graph, int start, int target)
 		currentNode = restNodes.at(0);
 		if (currentNode == target)
 		{
+			std::cout << "end" << std::endl;
 			//reconstructPath();
 			//break;
 		}
@@ -32,6 +40,42 @@ void Astar::mostShortWay(vector<vector<int>>* graph, int start, int target)
 			//auto iter = find(begin(restNodes), end(restNodes), node1);
 		}
 	}
+	*/
+
+	predecessor.push_back(start);
+	int currentNode;
+
+	while (!onpenList.empty())
+	{
+		currentNode = onpenList.at(0);
+		for (size_t i = 0; i < onpenList.size(); i++)
+		{
+			if (onpenList.at(i) < currentNode)
+				currentNode = onpenList.at(i);
+		}
+
+		auto iter = find(begin(onpenList), end(onpenList), currentNode);
+		onpenList.erase(iter);
+		closedList.push_back(currentNode);
+
+		if (currentNode == target)
+		{
+			std::cout << "end" << std::endl;
+			//reconstructPath();
+			//break;
+		}
+
+		findNeightbours(currentNode);
+
+		for (size_t i = 0; i < neighbours.size(); i++)
+		{
+			auto neightClosedList = find(begin(closedList), end(closedList), neighbours.at(i));
+			auto neightOpenList = find(begin(onpenList), end(onpenList), neighbours.at(i));
+			int graphx = neighbours.at(i) % graph->at(0).size();
+			//if (!(neightClosedList != end(closedList) || ((neightOpenList != end(onpenList)) && (distance.at(distance.at(neighbours.at(i)) < graph->at(neighbours.at(i))))
+		}
+	}
+
 }
 
 int Astar::compareHeur(Node node1, Node node2)

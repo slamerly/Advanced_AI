@@ -60,7 +60,7 @@ void Dij::Destination(int dest)
     cout << endl << "DESTINATION(" << dest << ")" << endl;
     cout << "Cost: " << distance.at(dest) << endl;
 
-    cout << "Road: ";
+    cout << "Road: " << dest << " <- ";
     int cpt = dest;
     while ( cpt != startNode )
     {
@@ -97,6 +97,7 @@ int Dij::findMin(vector<int> mat)
         {
             min = distance[mat[i]];
             node = mat[i];
+            break;
         }
     }
     //cout << "Find min : " << node << endl;

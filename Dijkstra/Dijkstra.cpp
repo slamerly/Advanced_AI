@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "Dij.h"
+#include "Astar.h"
 
 using namespace std;
 
@@ -117,11 +118,18 @@ int main()
     cout << endl;
     */
 
-    //Dij* dij = new Dij(&graph, 0);
-    //dij->Dijkstra();
-    //dij->Destination(3);
+    /*
+    Dij* dij = new Dij(&graph, 0);
+    dij->Dijkstra();
+    dij->Destination(3);
+    */
 
+    /*
     Dij* dij = new Dij(&translated, 0);
     dij->Dijkstra();
-    dij->Destination(4);
+    dij->Destination(24);
+    */
+
+    Astar* ast = new Astar(&graph2);
+    ast->mostShortWay(0, 24);
 }

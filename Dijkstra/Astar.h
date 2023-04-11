@@ -11,14 +11,17 @@ struct Node
 class Astar
 {
 public:
-	void mostShortWay(vector<vector<int>>* graph, int start, int end);
+	Astar(vector<vector<int>>* graphP);
+	void mostShortWay(int start, int target);
 
 private:
 	vector<vector<int>>* graph;
 	int start;
 	vector<int> distance;
+	vector<int> onpenList;
+	vector<int> closedList;
 	vector<int> predecessor;
-	vector<int> restNodes;
+	vector<int> restNodes; // closed
 	vector<int> neighbours;
 	vector<int> heuristique;
 
