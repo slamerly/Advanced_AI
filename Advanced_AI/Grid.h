@@ -12,12 +12,17 @@ public:
     class Tile& getStartTile();
     class Tile& getEndTile();
 
+    std::vector<std::vector<class Tile*>>* getTiles() { return &tiles; }
+
 private:
     void selectTile(size_t row, size_t col);
     class Tile* selectedTile;
 
     bool containStart = false;
     bool containEnd = false;
+
+    int posStart;
+    int posEnd;
 
     // 2D vector of tiles in grid
     std::vector<std::vector<class Tile*>> tiles;

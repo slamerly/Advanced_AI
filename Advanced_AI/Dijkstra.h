@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Tile.h"
 
 using namespace std;
 
@@ -7,13 +8,16 @@ class Dijkstra
 
 {
 public:
-	Dijkstra(vector<vector<int>>* graphP, int debP);
-	~Dijkstra();
+	Dijkstra(vector<vector<int>>* graphP);
 
 	void setGraph(vector<vector<int>>* graphP);
 	void setStartNode(int startNodeP);
-	void Research();
+	void Research(int debP);
 	void Destination(int dest);
+
+	// Grid
+	void setTiles(vector<vector<Tile*>>* refTiles);
+	void updateTile(int node);
 
 private:
 	vector<vector<int>>* graph;
@@ -21,6 +25,7 @@ private:
 	vector<int> restNodes;
 	vector<int> predecessor;
 	int startNode;
+	vector<vector<Tile*>>* tiles = nullptr;
 
 	void initialize(vector<vector<int>>* mat, int deb);
 	int findMin(vector<int> mat);

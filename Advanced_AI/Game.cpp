@@ -5,7 +5,6 @@
 #include "BackgroundSpriteComponent.h"
 #include <iostream>
 #include "Maths.h"
-#include "Dijkstra.h"
 #include "Astar.h"
 
 bool Game::initialize()
@@ -43,14 +42,34 @@ void Game::load()
         {1, 1, 1, 1, 1}
     };
 
-    vector<vector<int>> translated = translate(&graph2);
+    vector<vector<int>> circuit;
+
+    for (size_t i = 0; i < 30; i++)
+    {
+        vector<int> temp;
+        for (size_t j = 0; j < 40; j++)
+        {
+            temp.push_back(rand() % 2);
+        }
+        circuit.push_back(temp);
+    }
+
+    grid = new Grid(&circuit);
+
+    translated = translate(&circuit);
+
+    dij = new Dijkstra(&translated);
+
+    //Astar* ast = new Astar(&circuit, &translated);
 
     /*
-    for (size_t i = 0; i < translated.size(); i++)
+    //for (size_t i = 0; i < translated.size(); i++)
+    for (size_t i = 0; i < 5; i++)
     {
-        for (size_t j = 0; j < translated.at(i).size(); j++)
+        //for (size_t j = 0; j < translated.at(i).size(); j++)
+        for (size_t j = 0; j < 60; j++)
         {
-            cout << translated.at(i).at(j) << ", ";
+            cout << j << ": " << translated.at(i).at(j) << ", ";
         }
         cout << endl;
     }
@@ -62,6 +81,7 @@ void Game::load()
     dij->Dijkstra();
     dij->Destination(3);
     */
+    /*
     Dijkstra* dij = new Dijkstra(&translated, 0);
     dij->Research();
     dij->Destination(19);
@@ -70,8 +90,7 @@ void Game::load()
 
     Astar* ast = new Astar(&graph2, &translated);
     ast->mostShortWay(0, 19);
-
-    grid = new Grid();
+    */
 
     /*
     vector<vector<int>> circuit
@@ -336,7 +355,8 @@ vector<vector<int>> Game::translate(vector<vector<int>>* graph)
     {
         for (size_t j = 0; j < graph->at(i).size(); j++)
         {
-            neightbours(graph, &trans, i, j);
+            if (graph->at(i).at(j) != 0)
+                neightbours(graph, &trans, i, j);
         }
     }
 

@@ -1,6 +1,7 @@
 #include "Grid.h"
 #include "Tile.h"
 #include <iostream>
+#include "Game.h"
 
 Grid::Grid() :
 	Actor(), selectedTile(nullptr)
@@ -45,26 +46,17 @@ Grid::Grid(std::vector<std::vector<int>>* circuit) :
 		{
 			tiles[i][j] = new Tile();
 			tiles[i][j]->setPosition(Vector2(TILESIZE / 2.0f + j * TILESIZE, START_Y + i * TILESIZE));
-			tiles[i][j]->setTileState(Tile::TileState::Default);
 
-			/*
 			switch (circuit->at(i).at(j))
 			{
 			case 0:
 			default:
-				tiles[i][j]->setTileState(Tile::TileState::Default);
+				tiles[i][j]->setTileState(Tile::TileState::Obstacle);
 				break;
 			case 1:
-				tiles[i][j]->setTileState(Tile::TileState::Border);
-				break;
-			case 2:
-				tiles[i][j]->setTileState(Tile::TileState::Tree);
-				break;
-			case 3:
-				tiles[i][j]->setTileState(Tile::TileState::Building);
+				tiles[i][j]->setTileState(Tile::TileState::Default);
 				break;
 			}
-			*/
 		}
 	}
 }
@@ -75,7 +67,6 @@ void Grid::processClick(int x, int y)
 	y -= static_cast<int>(START_Y - TILESIZE / 2);
 	if (y >= 0)
 	{
-		std::cout << "hemm" << std::endl;
 		x /= static_cast<int>(TILESIZE);
 		y /= static_cast<int>(TILESIZE);
 
@@ -109,17 +100,28 @@ void Grid::selectTile(size_t row, size_t col)
 		}
 		selectedTile = tiles[row][col];
 
-		if (!containStart)
+		if (!containStart && state != Tile::TileState::End)
 		{
 			selectedTile->setTileState(Tile::TileState::Start);
 			selectedTile->toggleSelect();
+			posStart = row * NB_COLS + col;
+			containStart = true;
 			return;
 		}
 
-		if (!containEnd)
+		if (!containEnd && state != Tile::TileState::Start)
 		{
 			selectedTile->setTileState(Tile::TileState::End);
 			selectedTile->toggleSelect();
+			posEnd = row * NB_COLS + col;
+			containEnd = true;
+
+			// Dijkstra
+			getGame().getDij()->setTiles(&tiles);
+			cout << posStart << endl;
+			getGame().getDij()->Research(posStart);
+			getGame().getDij()->Destination(posEnd);
+
 			return;
 		}
 	}

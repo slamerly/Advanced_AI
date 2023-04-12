@@ -1,14 +1,9 @@
 #include "Dijkstra.h"
 #include <iostream>
 
-Dijkstra::Dijkstra(vector<vector<int>>* graphP, int debP)
+Dijkstra::Dijkstra(vector<vector<int>>* graphP)
 {
     graph = graphP;
-    startNode = debP;
-}
-
-Dijkstra::~Dijkstra()
-{
 }
 
 void Dijkstra::setGraph(vector<vector<int>>* graphP)
@@ -21,8 +16,22 @@ void Dijkstra::setStartNode(int startNodeP)
     startNode = startNodeP;
 }
 
-void Dijkstra::Research()
+void Dijkstra::setTiles(vector<vector<Tile*>>* refTiles)
 {
+    tiles = refTiles;
+}
+
+void Dijkstra::updateTile(int node)
+{
+    int nodeX = node / tiles->at(0).size();
+    int nodeY = node % tiles->at(0).size();
+
+    tiles->at(nodeX).at(nodeY)->setTileState(Tile::TileState::Dijkstra);
+}
+
+void Dijkstra::Research(int debP)
+{
+    startNode = debP;
     initialize(graph, startNode);
 
     for (size_t i = 0; i < graph->size(); i++)
@@ -33,6 +42,7 @@ void Dijkstra::Research()
     while (!restNodes.empty())
     {
         int node1 = findMin(restNodes);
+        cout << node1 << endl;
         if (node1 != -1)
         {
             auto iter = find(begin(restNodes), end(restNodes), node1);
@@ -63,19 +73,25 @@ void Dijkstra::Destination(int dest)
     cout << "ORIGIN(" << startNode << ") - DESTINATION(" << dest << ")" << endl;
     cout << "Cost: " << distance.at(dest) << endl;
 
-    cout << "Road: " << dest << " <- ";
-    int cpt = dest;
-    while ( cpt != startNode )
+    if (distance.at(dest) < 1000000)
     {
-        cout << predecessor.at(cpt);
-        cpt = predecessor.at(cpt);
-        if (cpt != startNode)
-            cout << " <- ";
+        cout << "Road: " << dest << " <- ";
+        int cpt = dest;
+        while (cpt != startNode)
+        {
+            cout << predecessor.at(cpt);
+            cpt = predecessor.at(cpt);
+            if (cpt != startNode)
+                cout << " <- ";
+        }
     }
+    else
+        cout << "There is no path for this destination.";
 }
 
 void Dijkstra::initialize(vector<vector<int>>* mat, int deb)
 {
+    //cout << mat->size() << endl;
     vector<int> line;
     for (size_t i = 0; i < mat->size(); i++)
     {

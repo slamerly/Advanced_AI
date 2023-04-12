@@ -4,11 +4,8 @@
 #include "Renderer.h"
 #include "Actor.h"
 #include "SpriteComponent.h"
-#include "Ball.h"
-#include "Paddle.h"
-#include "Brick.h"
 #include "Grid.h"
-#include "Moto.h"
+#include "Dijkstra.h"
 
 using std::vector;
 
@@ -46,9 +43,9 @@ public:
 	Renderer& getRenderer() { return renderer; }
 
 	// Game specific
-	Moto* getMoto() { return moto; }
 	int getScore() { return score; }
 	bool getPartyIsEnd() { return partyIsEnd; }
+	Dijkstra* getDij() { return dij; }
 
 	void setScore(int scoreP);
 	void endGame();
@@ -73,7 +70,8 @@ private:
 
 	// Game specific
 	Grid* grid;
-	Moto* moto;
+	vector<vector<int>> translated;
+	Dijkstra* dij;
 	int score;
 	bool partyIsEnd = false;
 };
