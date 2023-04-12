@@ -8,68 +8,32 @@ Astar::Astar(vector<vector<int>>* originalP, vector<vector<int>>* graphP)
 	graph = graphP;
 }
 
-void Astar::mostShortWay(int startP, int target)
+void Astar::mostShortWay(int start, int target)
 {
-	/*
 	int currentNode;
 	initialize(graph, start);
 
-	auto iter = find(begin(restNodes), end(restNodes), start);
-	restNodes.erase(iter);
-
-
-	while (!restNodes.empty())
+	while (!openList.empty())
 	{
-		currentNode = restNodes.at(0);
-		if (currentNode == target)
+		currentNode = openList.at(0);
+		//cout << "currentNode : " << currentNode << endl;
+
+		for (size_t i = 1; i < openList.size(); i++)
 		{
-			std::cout << "end" << std::endl;
-			//reconstructPath();
-			//break;
-		}
-		else
-		{
-			findNeightbours(currentNode);
-			for (size_t i = 0; i < neighbours.size(); i++)
+			if (distance.at(openList.at(i)) < distance.at(currentNode) || (distance.at(openList.at(i)) == distance.at(currentNode) && heuristique.at(openList.at(i)) < heuristique.at(currentNode)))
 			{
-				auto iter = find(begin(restNodes), end(restNodes), restNodes.at(i));
-				if (iter != end(restNodes) && distance.at(neighbours.at(i)) > graph->at(currentNode).at(neighbours.at(i)))
-				{
-					distance.at(neighbours.at(i)) = distance.at(currentNode) + graph->at(currentNode).at(neighbours.at(i));
-					heuristique.at(neighbours.at(i)) = distance.at(neighbours.at(i)) + (int(target / graph->size()) - int(currentNode / graph->size())) + (target % graph->size() - neighbours.at(i));
-				}
+				currentNode = openList.at(i);
+				//cout << "currentNode : " << currentNode << endl;
 			}
-			//auto iter = find(begin(restNodes), end(restNodes), node1);
 		}
-	}
-	*/
 
-	//predecessor.push_back(start);
-	start = startP;
-
-	int currentNode;
-	initialize(graph, start);
-
-	while (!onpenList.empty())
-	{
-		currentNode = onpenList.at(0);
-		//std::cout << currentNode << " - ";
-		for (size_t i = 0; i < onpenList.size(); i++)
-		{
-			//if (onpenList.at(i) < distance.at(currentNode))
-			if (distance.at(i) < distance.at(currentNode) || (distance.at(i) == distance.at(currentNode) && heuristique.at(i) < heuristique.at(currentNode)))
-				currentNode = onpenList.at(i);
-		}
-		//std::cout << currentNode << std::endl;
-
-		auto iter = find(begin(onpenList), end(onpenList), currentNode);
-		onpenList.erase(iter);
+		auto iter = find(begin(openList), end(openList), currentNode);
+		openList.erase(iter);
 		closedList.push_back(currentNode);
 
 		if (currentNode == target)
 		{
-			reconstructPath(target);
-			//break;
+			reconstructPath(start, target);
 			return;
 		}
 
@@ -77,44 +41,28 @@ void Astar::mostShortWay(int startP, int target)
 
 		for (size_t i = 0; i < neighbours.size(); i++)
 		{
+			//cout << neighbours.at(i) << " - ";
 			auto neightClosedList = find(begin(closedList), end(closedList), neighbours.at(i));
-			auto neightOpenList = find(begin(onpenList), end(onpenList), neighbours.at(i));
+			auto neightOpenList = find(begin(openList), end(openList), neighbours.at(i));
 
-			//int graphx = neighbours.at(i) / graph->at(0).size();
-			//int graphy = (neighbours.at(i) % graph->at(0).size()) - 1;
-
-			//cout << neighbours.at(i) << ": " << graphx << ", " << graphy << endl;
-
-			cout << neighbours.at(i) << ": " << endl;
 			int newDistance = distance.at(currentNode) + getDistance(currentNode, neighbours.at(i));
 
-			//if (!(neightClosedList != end(closedList) || ((neightOpenList != end(onpenList)) && (distance.at(neighbours.at(i)) < graph->at(currentNode).at(neighbours.at(i))))))
-			if (!(neightClosedList != end(closedList) || ((neightOpenList != end(onpenList)) && (distance.at(neighbours.at(i)) < newDistance))))
+			if (!(neightClosedList != end(closedList)) && (!(neightOpenList != end(openList)) || (newDistance < distance.at(neighbours.at(i)))))
 			{
-				cout << "distance: " << newDistance << endl;
-				//distance.at(neighbours.at(i)) = distance.at(currentNode) + graph->at(currentNode).at(neighbours.at(i));
+				//cout << neighbours.at(i) << " - ";
+				//cout << newDistance << endl;
 				distance.at(neighbours.at(i)) = newDistance;
 				heuristique.at(neighbours.at(i)) = getDistance(neighbours.at(i), target);
 				predecessor.at(neighbours.at(i)) = currentNode;
 
-				if (neightOpenList == end(onpenList))
+				if (neightOpenList == end(openList))
 				{
-					onpenList.push_back(neighbours.at(i));
+					openList.push_back(neighbours.at(i));
 				}
 			}
 		}
 	}
 
-}
-
-int Astar::compareHeur(Node node1, Node node2)
-{
-	if (node1.heur < node2.heur)
-		return 1;
-	else if (node1.heur == node2.heur)
-		return 0;
-	else
-		return -1;
 }
 
 int Astar::getDistance(int node1, int node2)
@@ -126,46 +74,46 @@ int Astar::getDistance(int node1, int node2)
 	int dstX = abs(node1x - node2x);
 	int dstY = abs(node1y - node2y);
 
-	cout << dstX << ", " << dstY << endl;
-
 	if (dstX > dstY)
 		return 14 * dstY + 10 * (dstX - dstY);
 	return 14 * dstX + 10 * (dstY - dstX);
 }
 
-void Astar::reconstructPath(int target)
+void Astar::reconstructPath(int start, int target)
 {
+	cout << "---- ASTAR ----" << endl;
 	cout << "ORIGIN(" << start << ") - DESTINATION(" << target << ")" << endl;
 	cout << "Cost: " << distance.at(target) << endl;
 
 	cout << "Road: " << target << " <- ";
-	int cpt = target;
-	while (cpt != start)
+	int node = target;
+	while (node != start)
 	{
-		cout << predecessor.at(cpt);
-		cpt = predecessor.at(cpt);
-		if (cpt != start)
+		cout << predecessor.at(node);
+		node = predecessor.at(node);
+		if (node != start)
 			cout << " <- ";
 	}
 }
 
 void Astar::findNeightbours(int node)
 {
+	//cout << node << ": " << endl;
 	neighbours.clear();
 	for (int i = 0; i < graph->at(node).size(); i++)
 	{
 		if (graph->at(node).at(i) != 0 && graph->at(node).at(i) < 1000000)
 		{
-			//std::cout << i << ", ";
+			//cout << i << ", ";
 			neighbours.push_back(i);
 		}
 	}
-	//std::cout << std::endl;
+	//cout << endl;
 }
 
 void Astar::initialize(vector<vector<int>>* mat, int deb)
 {
-	onpenList.push_back(deb);
+	openList.push_back(deb);
 
 	vector<int> line;
 	for (size_t i = 0; i < mat->size(); i++)
@@ -182,6 +130,5 @@ void Astar::initialize(vector<vector<int>>* mat, int deb)
 		}
 
 		predecessor.push_back(i);
-		//restNodes.push_back(i);
 	}
 }

@@ -46,6 +46,7 @@ void Dij::Dijkstra()
     }
 
     //result
+    
     cout << "RESULT - Origin(" << startNode << ")" << endl;
     cout << "Predecesor:    Distance:" << endl;
     for (size_t i = 0; i < predecessor.size(); i++)
@@ -53,11 +54,13 @@ void Dij::Dijkstra()
         cout << i << ": " << predecessor.at(i) << "               " << distance.at(i) << endl;
     }
     cout << endl;
+    
 }
 
 void Dij::Destination(int dest)
 {
-    cout << endl << "DESTINATION(" << dest << ")" << endl;
+    cout << "---- DIJKSTRA ----" << endl;
+    cout << "ORIGIN(" << startNode << ") - DESTINATION(" << dest << ")" << endl;
     cout << "Cost: " << distance.at(dest) << endl;
 
     cout << "Road: " << dest << " <- ";

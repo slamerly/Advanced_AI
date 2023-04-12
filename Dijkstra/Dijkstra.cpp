@@ -7,7 +7,6 @@ using namespace std;
 
 void neightbours(vector<vector<int>>* graph, vector<vector<int>>* trans, int x, int y)
 {
-    //vector<int> neighbours;
     int cptx = -1;
     while (cptx < 2)
     {
@@ -20,43 +19,40 @@ void neightbours(vector<vector<int>>* graph, vector<vector<int>>* trans, int x, 
                 {
                     if (x + cptx == x && y + cpty == y)
                     {
-                        //trans->at(x + cptx).at(y + cpty) = 0;
                         trans->at(x * graph->at(0).size() + y).at((x + cptx) * graph->at(0).size() + y + cpty) = 0;
-
                         //cout << "trans->at(" << x * graph->at(0).size() + y << ").at(" << (x + cptx) * graph->at(0).size() + y + cpty << ") = 0;" << endl;
-                        //neighbours.push_back(0);
                     }
                     else
                     {
                         if (graph->at(x + cptx).at(y + cpty) != 0)
                         {
-                            //trans->at(x + cptx).at(y + cpty) = 10;
-                            trans->at(x * graph->at(0).size() + y).at((x + cptx) * graph->at(0).size() + y + cpty) = 10;
-                            //neighbours.push_back(10);
+                            if (cptx != 0 && cpty != 0)
+                            {
+                                if ((cptx == -1 && cpty == -1 && ((graph->at(x + cptx + 1).at(y + cpty) == 1) || (graph->at(x + cptx).at(y + cpty + 1) == 1))) ||
+                                    (cptx == -1 && cpty == 1 && ((graph->at(x + cptx + 1).at(y + cpty) == 1) || (graph->at(x + cptx).at(y + cpty - 1) == 1))) ||
+                                    (cptx == 1 && cpty == -1 && ((graph->at(x + cptx - 1).at(y + cpty) == 1) || (graph->at(x + cptx).at(y + cpty + 1) == 1))) ||
+                                    (cptx == 1 && cpty == 1 && ((graph->at(x + cptx - 1).at(y + cpty) == 1) || (graph->at(x + cptx).at(y + cpty - 1) == 1))))
+                                {
+                                    trans->at(x * graph->at(0).size() + y).at((x + cptx) * graph->at(0).size() + y + cpty) = 14;
+                                }
+                                else
+                                {
+                                    trans->at(x * graph->at(0).size() + y).at((x + cptx) * graph->at(0).size() + y + cpty) = 1000000;
+                                }
+                            }
+                            else
+                            {
+                                trans->at(x * graph->at(0).size() + y).at((x + cptx) * graph->at(0).size() + y + cpty) = 10;
+                            }
                         }
                         else
                         {
-                            //trans->at(x + cptx).at(y + cpty) = 1000000;
                             trans->at(x * graph->at(0).size() + y).at((x + cptx) * graph->at(0).size() + y + cpty) = 1000000;
-                            //neighbours.push_back(1000000);
                         }
                     }
                 }
-                else
-                {
-                    //neighbours.push_back(1000000);
-                }
                 cpty++;
             }
-        }
-        else
-        {
-            /*
-            for (size_t i = 0; i < 3; i++)
-            {
-                neighbours.push_back(1000000);
-            }
-            */
         }
         cptx++;
     }
@@ -100,7 +96,7 @@ int main()
         {1, 1, 1, 1, 1},
         {1, 1, 0, 0, 1},
         {1, 0, 0, 1, 1},
-        {1, 0, 1, 1, 1},
+        {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1}
     };
     
@@ -123,15 +119,12 @@ int main()
     dij->Dijkstra();
     dij->Destination(3);
     */
-
-    /*
     Dij* dij = new Dij(&translated, 0);
     dij->Dijkstra();
-    dij->Destination(24);
+    dij->Destination(19);
 
     cout << endl;
-    */
 
     Astar* ast = new Astar(&graph2, &translated);
-    ast->mostShortWay(0, 24);
+    ast->mostShortWay(0, 19);
 }
